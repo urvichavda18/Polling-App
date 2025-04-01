@@ -109,7 +109,7 @@ exports.getUserInfo = async (req, res) => {
             totalPollsVotes: 0,
             totalPollsBookmarked: 0,
         };
-        res.status(200).json(userInfo)
+        res.status(200).json(userInfo);
     } catch (err) {
         res
             .status(500)
@@ -117,6 +117,7 @@ exports.getUserInfo = async (req, res) => {
 
     }
 }
+
 
 
 

@@ -3,17 +3,17 @@ const path = require("path");
 
 // configure storage
 const storage = multer.diskStorage({
-    destination: (req,file, cb) => {
-        
-        cb(null, path.join(__dirname, 'uploads')); 
+    destination: (req, file, cb) => {
+
+        cb(null, 'uploads/');
     },
-    filename: (req,file, cb) => {
-        
+    filename: (req, file, cb) => {
         cb(null, `${Date.now()}-${file.originalname}`);
     },
 });
 
 // File filter to restrict file types
+
 const fileFilter = (req, file, cb) => {
     const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
     if (allowedTypes.includes(file.mimetype)) {
@@ -22,7 +22,6 @@ const fileFilter = (req, file, cb) => {
         cb(new Error('Only .jpeg, .png, and .jpg formats are allowed'), false);
     }
 };
-
 
 const upload = multer({ storage, fileFilter });
 

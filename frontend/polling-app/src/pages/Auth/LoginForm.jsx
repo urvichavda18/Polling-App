@@ -1,25 +1,30 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import AuthLayout from "../../components/layout/AuthLayout"
 import { useNavigate } from 'react-router-dom';
 import AuthInput from '../../components/input/AuthInput';
 import { Link } from 'react-router-dom';
 import { validateEmail } from '../../utils/helper';
-
+import axiosInstance from '../../utils/axiosInstance';
+import { API_PATHS } from '../../utils/apiPaths';
+import { UserContext } from '../../context/UserContext';
+// import axios from 'axios';
 function LoginForm() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState(null);
 
+
+    const {updateUser} = useContext(UserContext)
     const navigate = useNavigate();
 
     // Handel Login from Submit 
     const handelLogin = async (e) => {
         e.preventDefault();
-        if(!validateEmail (email)){
+        if (!validateEmail(email)) {
             setError("Plase enter a valid Email Address");
             return;
         }
-        if(!password){
+        if (!password) {
             setError("Plase enter the password");
             return;
         }
@@ -27,11 +32,25 @@ function LoginForm() {
 
         //Ligin API
         try {
-            
+            const response = await axiosInstance.post(API_PATHS.AUTH.LOGIN, {
+                email,
+                password,
+            });
+            const { token, user } = response.data;
+            if (token) {
+                // console.log({ token, user });
+                localStorage.setItem("token",token);
+                updateUser(user)
+                navigate("/dashboard");
+            }
         } catch (error) {
-            
+            if (error.response && error.response.data.message) {
+                setError(error.response.data.message);
+            }else{
+                setError("something went wrong. Please try again.");
+            }
         }
-     };
+    };
     return (
         <AuthLayout>
             <div className='lg:w-[70%] h-3/4 md:h-full flex flex-col justify-center'>
@@ -44,7 +63,7 @@ function LoginForm() {
                         value={email}
                         onChange={({ target }) => setEmail(target.value)}
                         label="Email Address"
-                        placeholder="urvi@example.com"
+                        placeholder="example@gmail.com"
                         type="text"
                     />
                     <AuthInput
