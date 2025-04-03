@@ -13,7 +13,6 @@ function LoginForm() {
     const [password, setPassword] = useState("");
     const [error, setError] = useState(null);
 
-
     const {updateUser} = useContext(UserContext)
     const navigate = useNavigate();
 
@@ -38,7 +37,7 @@ function LoginForm() {
             });
             const { token, user } = response.data;
             if (token) {
-                // console.log({ token, user });
+                console.log({ token, user });
                 localStorage.setItem("token",token);
                 updateUser(user)
                 navigate("/dashboard");
