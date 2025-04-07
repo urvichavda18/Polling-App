@@ -24,6 +24,27 @@ function CreatePoll() {
     }));
   };
 
+  //Create new poll
+
+  const handleCreatePoll = async () => {
+    const { question, type, options, imageOptions, error } = pollData;
+    if (!question || !type) {
+      console.log("CREATE:", { question, type, options, error });
+      handleValueChange("error", "Question & type are reqired");
+      return;
+    }
+
+    if (type == "single-choice" && options.length < 2) {
+      handleValueChange("error", "Enter at teo options");
+      return;
+    }
+
+    if (type == "image-based" && imageOptions.length < 2) {
+      handleValueChange("error", "Enter at teo options");
+      return;
+    }
+  }
+
   return (
     <DashboardLayout activeMenu='Create Poll'>
       <div className='bg-gray-100/80 my-5 p-5 rounded-lg mx-auto'>
@@ -93,6 +114,14 @@ function CreatePoll() {
             </div>
           </div>
         )}
+        {
+          pollData.error && (
+            <p className='text-xs font-medium text-red-500 mt-5'>
+              {pollData.error}
+            </p>
+          )
+        }
+        <button className='btn-primary py-2 mt-6' onClick={handleCreatePoll}>CREATE</button>
       </div>
 
     </DashboardLayout>
