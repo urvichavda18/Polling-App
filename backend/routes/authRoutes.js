@@ -1,5 +1,4 @@
 const express = require('express');
-
 const {
     registerUser,
     loginUser,
@@ -27,5 +26,6 @@ router.post("/upload-image", upload.single("image"), (req, res) => {
 });
 
 module.exports = router;
+
 
 
